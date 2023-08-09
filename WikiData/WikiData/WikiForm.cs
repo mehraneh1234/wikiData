@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -21,6 +22,17 @@ namespace WikiData
         static int fields = 4;      // Data Structure Name, Category, Structure and Definition
         int ptr = 0;                // Current length of array with data
         private string[,] dataStructuresArray = new string[max, fields];
+
+        private void FillArray()
+        {
+            for (int i = 0; i < max; i++)
+            {
+                for (int j =0; j < fields; j++)
+                {
+                   // dataStructuresArray[i, j] 
+                }
+            }
+        }
 
         private void ButtonSearch_Click(object sender, EventArgs e)
         {
@@ -51,12 +63,12 @@ namespace WikiData
                 }
                 catch
                 {
-                    StatusStripDataStr.Text = "Well that didn't work!";
+                    toolStripStatusLabel1.Text = "Well that didn't work!";
                 }
             }
             else
             {
-                StatusStripDataStr.Text = "The array is full!";
+                toolStripStatusLabel1.Text = "The array is full!";
             }
         }
         // Method to clear the input text boxes.
@@ -114,7 +126,7 @@ namespace WikiData
             }
             else
             {
-                StatusStripDataStr.Text = "Nothing to display";
+                toolStripStatusLabel1.Text = "Nothing to display";
             }
                 
         }
@@ -132,7 +144,7 @@ namespace WikiData
             try
             {
                 
-                string selectedItem = lstDataStructure.SelectedItem.ToString();
+                string selectedItem = lstDataStructure.SelectedItems.ToString();
                 string ss;
                 //bool found = false;
                 for (int i = 0; i <= ptr; i++)
@@ -250,24 +262,74 @@ namespace WikiData
                     }
                     else
                     {
-                        StatusStripDataStr.Text = "No match found!";
+                        toolStripStatusLabel1.Text = "No match found!";
                     }
 
                 }
             }
             catch
             {
-                StatusStripDataStr.Text = "Well that didn't work!";
+                toolStripStatusLabel1.Text = "Well that didn't work!";
             }
             
         }
 
         private void ButtonDelete_Click(object sender, EventArgs e)
         {
+            DeleteData();
+            DisplayListDataStr();
+        }
+
+        private void DeleteData()
+        {
+            StatusStripDataStr.Items.Clear();
+            try
+            {
+
+                string selectedItem = lstDataStructure.SelectedItems.ToString();
+                string ss;
+               
+
+                //bool found = false;
+                for (int i = 0; i <= ptr; i++)
+                {
+                    ss = dataStructuresArray[i, 0] + "\t" + dataStructuresArray[i, 1] + "\t" + dataStructuresArray[i, 2] + "\t" + dataStructuresArray[i, 3];
+                    if (selectedItem == ss)
+                    {
+                        DialogResult dr = MessageBox.Show("Are you sure to delete row?", "Confirmation", MessageBoxButtons.YesNo);
+                        if (dr == DialogResult.Yes)
+                        {
+
+                            // Delete row from array
+                          
+                            Array.Clear(dataStructuresArray, i, 4);
+                            toolStripStatusLabel1.Text = "Delete the selected item!";
+                            break;
+                        }
+                        else 
+                        {
+                            // Nothing to do
+                            break;
+                        }
+                        
+                    }
+                    else
+                    {
+                        toolStripStatusLabel1.Text = "No match found!";
+                    }
+
+                }
+            }
+            catch
+            {
+                toolStripStatusLabel1.Text = "Select an item in the listbox!";
+            }
 
         }
 
-        private void ButtonLoad_Click(object sender, EventArgs e)
+      
+
+                private void ButtonLoad_Click(object sender, EventArgs e)
         {
 
         }
