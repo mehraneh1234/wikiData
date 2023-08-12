@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,66 +19,144 @@ namespace WikiData
         {
             InitializeComponent();
             InitializeListView();
+            listViewData.SelectedIndexChanged += listView_SelectedIndexChanged;
         }
 
         static int max = 3;        // Maximum number of data structures
         static int fields = 4;      // Data Structure Name, Category, Structure and Definition
         int ptr = 0;                // Current length of array with data
         private string[,] dataArray = new string[max, fields];
-        private string[,] tempDataArray = new string[max, fields];
         private TextBox[] textBoxValues;
 
        
 
         private void InitializeListView()
         {
-              listViewData.View = View.Details;
-            /*   for (int col = 0; col < fields; col++)
-               {
-                   listViewData.Columns.Add($"Column {col + 1}", "~");
-               }
-             */
+            
+            listViewData.View = View.Details;
+            
             listViewData.Columns.Add("Data Structure Name");
             listViewData.Columns.Add("Category");
             listViewData.Columns.Add("Structure");
             listViewData.Columns.Add("Definition");
         }
 
-     /*   private void UpdateListView()
-        {
-            //listViewData.Items.Clear();
+        
 
-            for (int i = 0; i < listViewData.Items.Count; i++)
+        private void Swap(string[,] array, int row1, int row2)
+        {
+            int numCols = array.GetLength(1);
+            for (int col = 0; col < numCols; col++)
             {
-                ListViewItem item = new ListViewItem();
-                listViewData.Items.Add(item);
-                for (int j = 0; j < fields; j++)
+                string temp = array[row1, col];
+                array[row1, col] = array[row2, col];
+                array[row2, col] = temp;
+            }
+        }
+
+        private void BubbleSortByNameAscending(string[,] array)
+        {
+            int numRows = array.GetLength(0);
+
+            for (int i = 0; i < numRows - 1; i++)
+            {
+                for (int j = 0; j < numRows - i - 1; j++)
                 {
+                    if (!string.IsNullOrEmpty(array[j, 0]) && !string.IsNullOrEmpty(array[j+1, 0]))
+                    {
+                        if (string.Compare(array[j, 0], array[j + 1, 0]) > 0)
+                        {
+                            Swap(array, j, j + 1);
+                        }
+                    }
                     
-                   
-                        item.SubItems.Add(dataArray[i, j]);
-                   
                 }
+            }
+        }
+
+
+        private void BinarySearch(string searchName)
+        {
+            // Deselect previous selected item
+            if (listViewData.SelectedItems.Count > 0)
+            {
+                listViewData.SelectedItems[0].Selected = false;
+            }
+            StatusStripDataStr.Items.Clear();
+            int left = 0;
+            int right = max - 1;
+            int result = -1;
+
+            while (left <= right)
+            {
+                int mid = left + (right - left) / 2;
+
+                if (dataArray[mid, 0] == searchName)
+                {
+                    result = mid;
+                    break;
+                }
+                else if (string.Compare(dataArray[mid, 0], searchName) < 0)
+                {
+                    left = mid + 1;
+                }
+                else
+                {
+                    right = mid - 1;
+                }
+            }
+
+            if (result != -1)
+            {
+                listViewData.Items[result].Selected = true;
+                listViewData.Focus();
+
+                txtDataStrName.Text = dataArray[result, 0];
+                txtCategory.Text = dataArray[result, 1];
+                txtStructure.Text = dataArray[result, 2];
+                txtDefinition.Text = dataArray[result, 3];
+               
+                StatusStripDataStr.Items.Add("Entry found.");
+            }
+            else
+            {
+                StatusStripDataStr.Items.Add("Entry not found!");
+                txtSearch.Clear();
+                // Deselect previous selected item
+                listViewData.SelectedItems[0].Selected = false;
                 
             }
-         */
+        }
 
-            
-        
+
         private void ButtonSearch_Click(object sender, EventArgs e)
         {
+            string searchName = txtSearch.Text;
+            StatusStripDataStr.Items.Clear();
+            Clear_TextBoxes();
 
+            if (!string.IsNullOrEmpty(searchName))
+            {
+                BinarySearch(searchName);
+            }
+            else
+            {
+                StatusStripDataStr.Items.Add("Please enter a search term.");
+            }
         }
         // Button method to add a new data structure and sort data
         private void ButtonAdd_Click(object sender, EventArgs e)
         {
-            //AddData();
-            //Clear_TextBoxes();
-            //Bubble_Sort();
-            //DisplayListDataStr();
-           
-            if (textBoxValues[0].Text != "" && textBoxValues[1].Text != "" 
-                && textBoxValues[2].Text != "" && textBoxValues[3].Text != "")
+            AddData();
+            Clear_TextBoxes();
+            BubbleSortByNameAscending(dataArray);
+            DisplayListViewData();
+        }
+
+        private void AddData()
+        {
+            if (textBoxValues[0].Text != "" && textBoxValues[1].Text != ""
+               && textBoxValues[2].Text != "" && textBoxValues[3].Text != "")
             {
                 if (listViewData.Items.Count < max)
                 {
@@ -95,9 +174,10 @@ namespace WikiData
                     {
                         dataArray[rowIndex, col] = row[col];
                     }
+                    ++ptr;
                     StatusStripDataStr.Items.Clear();
                     StatusStripDataStr.Items.Add("The entered data is added to the array.");
-                    
+
                 }
                 else
                 {
@@ -110,34 +190,28 @@ namespace WikiData
                 StatusStripDataStr.Items.Clear();
                 StatusStripDataStr.Items.Add("Please fill all text boxes.");
             }
-            Clear_TextBoxes();
+            
         }
 
-        // This method add a new item to the 2 dimontional array.
-     /*   private void AddData()
+        private void DisplayListViewData()
         {
-            StatusStripDataStr.Items.Clear();
-            if (ptr < max)
+            listViewData.Items.Clear();
+            for (int row = 0; row < dataArray.GetLength(0); row++)
             {
-                try
+                if (!string.IsNullOrEmpty(dataArray[row, 0]))
                 {
-                    dataArray[ptr, 0] = txtDataStrName.Text;
-                    dataArray[ptr, 1] = txtCategory.Text;
-                    dataArray[ptr, 2] = txtStructure.Text;
-                    dataArray[ptr, 3] = txtDefinition.Text;
-                    ptr++;
+                    ListViewItem item = new ListViewItem(dataArray[row, 0]);
+                    for (int col = 1; col < dataArray.GetLength(1); col++)
+                    {
+                        item.SubItems.Add(dataArray[row, col]);
+                    }
+                    listViewData.Items.Add(item);
                 }
-                catch
-                {
-                    toolStripStatusLabel1.Text = "Well that didn't work!";
-                }
+                
             }
-            else
-            {
-                toolStripStatusLabel1.Text = "The array is full!";
-            }
+
         }
-     */
+   
         // Method to clear the input text boxes.
         private void Clear_TextBoxes()
         {
@@ -147,58 +221,8 @@ namespace WikiData
             }
             
         }
-        // Method to sort and display the array in the listbox
-    /*    private static void ‌Bubble_Sort()
-        {
-            for (int x = 1; x < max; x++)
-            {
-                for (int i = 0; i < max - 1; i++)
-                {
-                    if (!(string.IsNullOrEmpty(dataArray[i + 1, 0])))
-                    {
-                        if (string.Compare(dataArray[i, 0], dataArray[i + 1, 0]) == 1)
-                        {
-                            Swap(i);
-                        }
-                    }
-
-                }
-            }
-
-        }
-        // Swap Routine
-        private void Swap(int index)
-        {
-            string temp;
-            for (int i = 0; i < fields; i++)
-            {
-                temp = dataArray[index, i];
-                dataArray[index, i] = dataArray[index + 1, i];
-                dataArray[index + 1, i] = temp;
-            }
-        }
-    */
-        // Display Data Structure Array
-   /*     private void DisplayListDataStr()
-        {
-           // StatusStripDataStr.Items.Clear();
-            string rec = "";
-            if (ptr > 0)
-            {
-                listViewData.Items.Clear();
-                for (int x = 0; x < ptr; x++)
-                {
-                    rec = dataArray[x, 0] + "\t" + dataArray[x, 1] + "\t" + dataArray[x, 2] + "\t" + dataArray[x, 3];
-                    listViewData.Items.Add(rec);
-                }
-            }
-            else
-            {
-                StatusStripDataStr.Items.Add("Nothing to display");
-            }
-                
-        }
-   */
+     
+ 
 
         private void ButtonEdit_Click(object sender, EventArgs e)
         {
@@ -232,56 +256,6 @@ namespace WikiData
 
         private void ButtonDelete_Click(object sender, EventArgs e)
         {
-            DeleteData();
-           // DisplayListDataStr();
-        }
-
-        private void DeleteData()
-        {
-            /*StatusStripDataStr.Items.Clear();
-            try
-            {
-
-                string selectedItem = listViewData.SelectedItems.ToString();
-                string ss;
-               
-
-                //bool found = false;
-                for (int i = 0; i <= ptr; i++)
-                {
-                    ss = dataArray[i, 0] + "\t" + dataArray[i, 1] + "\t" + dataArray[i, 2] + "\t" + dataArray[i, 3];
-                    if (selectedItem == ss)
-                    {
-                        DialogResult dr = MessageBox.Show("Are you sure to delete row?", "Confirmation", MessageBoxButtons.YesNo);
-                        if (dr == DialogResult.Yes)
-                        {
-
-                            // Delete row from array
-                          
-                            Array.Clear(dataArray, i, 4);
-                            StatusStripDataStr.Items.Add("Delete the selected item!");
-                            break;
-                        }
-                        else 
-                        {
-                            // Nothing to do
-                            break;
-                        }
-                        
-                    }
-                    else
-                    {
-                        StatusStripDataStr.Items.Add("No match found!");
-                    }
-
-                }
-            }
-            catch
-            {
-                StatusStripDataStr.Items.Add("Select an item in the listbox!");
-            }*/
-
-
             if (listViewData.SelectedItems.Count > 0)
             {
                 DialogResult result = MessageBox.Show("Are you sure to delete this entry?", "Confirmation",
@@ -295,16 +269,7 @@ namespace WikiData
                     }
                     UpdateDataArray(selectedIndex);
                     listViewData.Items.RemoveAt(selectedIndex);
-
-                  /*  for (int i = 0; i < listViewData.Items.Count; i++)
-                    {
-                        for (int j = 0; j < fields; j++)
-                        {
-                            dataArray[i, j] = listViewData.Items[i].SubItems[j].Text;
-                        }
-                    } */
-                    // UpdateDataArray();
-                    // UpdateListView();
+                    --ptr;
                 }
             }
             else
@@ -313,6 +278,8 @@ namespace WikiData
             }
 
         }
+
+        
         private void UpdateDataArray(int selectedRowIndex)
         {
             int numRows = dataArray.GetLength(0);
@@ -353,17 +320,114 @@ namespace WikiData
 
         private void ButtonLoad_Click(object sender, EventArgs e)
         {
+            StatusStripDataStr.Items.Clear();
 
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Binary Files|*.dat|All Files|*.*";
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string fileName = openFileDialog.FileName;
+
+                try
+                {
+                    using (FileStream fileStream = new FileStream(fileName, FileMode.Open))
+                    using (BinaryReader binaryReader = new BinaryReader(fileStream))
+                    {
+                        // Read the number of entries
+                        int loadedRowCount = binaryReader.ReadInt32();
+
+                        // Resize the array to match the loaded data
+                        ResizeDataArray(loadedRowCount);
+
+                        // Read the data
+                        for (int i = 0; i < loadedRowCount; i++)
+                        {
+                            for (int j = 0; j < fields; j++)
+                            {
+                                dataArray[i, j] = binaryReader.ReadString();
+                            }
+                        }
+
+                        // Update ListView and show feedback
+                        DisplayListViewData();
+                        StatusStripDataStr.Items.Add("Data loaded successfully.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    StatusStripDataStr.Items.Add("Error loading data: " + ex.Message);
+                }
+            }
+        }
+        private void ResizeDataArray(int newSize)
+        {
+            string[,] newDataArray = new string[newSize, fields];
+            for (int i = 0; i < ptr; i++)
+            {
+                for (int j = 0; j < fields; j++)
+                {
+                    newDataArray[i, j] = dataArray[i, j];
+                }
+            }
+            dataArray = newDataArray;
+            ptr = newSize;
         }
 
         private void ButtonSave_Click(object sender, EventArgs e)
         {
+            BubbleSortByNameAscending(dataArray);
+            StatusStripDataStr.Items.Clear();
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Binary Files|*.dat|All Files|*.*";
 
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string fileName = saveFileDialog.FileName;
+
+                try
+                {
+                    using (FileStream fileStream = new FileStream(fileName, FileMode.Create))
+                    using (BinaryWriter binaryWriter = new BinaryWriter(fileStream))
+                    {
+                        // Write the number of entries
+                        binaryWriter.Write(ptr);
+
+                        // Write the data
+                        for (int i = 0; i < ptr; i++)
+                        {
+                            for (int j =0; j < fields; j++)
+                            {
+                                binaryWriter.Write(dataArray[i, j]);
+                            }
+                        }
+                        StatusStripDataStr.Items.Add("Data saved successfully.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    StatusStripDataStr.Items.Add("Error saving data: " + ex.Message);
+                }
+            }
         }
          
         private void WikiForm_Load(object sender, EventArgs e)
         {
             textBoxValues = new TextBox[] { txtDataStrName, txtCategory, txtStructure, txtDefinition };
+        }
+
+        private void listView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            StatusStripDataStr.Items.Clear();
+            if (listViewData.SelectedItems.Count > 0)
+            {
+                int selectedIndex = listViewData.SelectedIndices[0];
+                txtDataStrName.Text = dataArray[selectedIndex, 0];
+                txtCategory.Text = dataArray[selectedIndex, 1];
+                txtStructure.Text = dataArray[selectedIndex, 2];
+                txtDefinition.Text = dataArray[selectedIndex, 3];
+              //  StatusStripDataStr.Items.Add("The selected Name is displyed.");
+            }
         }
     }
 }
