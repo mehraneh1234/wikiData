@@ -24,9 +24,9 @@ namespace WikiData
 
         static int max = 3;        // Maximum number of data structures
         static int fields = 4;      // Data Structure Name, Category, Structure and Definition
-        int ptr = 0;                // Current length of array with data
-        private string[,] dataArray = new string[max, fields];
-        private TextBox[] textBoxValues;
+        int ptr = 0;                // Current count of 2d array rows with data
+        private string[,] dataArray = new string[max, fields]; // 2d array to keep data in itself.
+        private TextBox[] textBoxValues;  // Define a variable with type of textbox
 
        
 
@@ -34,15 +34,15 @@ namespace WikiData
         {
             
             listViewData.View = View.Details;
-            
+            // Define the titles of the columns in the listview
             listViewData.Columns.Add("Data Structure Name");
             listViewData.Columns.Add("Category");
-            listViewData.Columns.Add("Structure");
-            listViewData.Columns.Add("Definition");
+            //listViewData.Columns.Add("Structure");
+            //listViewData.Columns.Add("Definition");
         }
 
         
-
+        // Swap the two rows of the 2d array with their fields
         private void Swap(string[,] array, int row1, int row2)
         {
             int numCols = array.GetLength(1);
@@ -53,7 +53,8 @@ namespace WikiData
                 array[row2, col] = temp;
             }
         }
-
+        // Compare the rows of the 2d array and by calling the swap method put the rows in
+        // ascending order by name in the 2d array.
         private void BubbleSortByNameAscending(string[,] array)
         {
             int numRows = array.GetLength(0);
@@ -74,7 +75,7 @@ namespace WikiData
             }
         }
 
-
+        // By calling binary search method find the item which is in searchName variable
         private void BinarySearch(string searchName)
         {
             // Deselect previous selected item
@@ -82,11 +83,14 @@ namespace WikiData
             {
                 listViewData.SelectedItems[0].Selected = false;
             }
+            // Clear the description on the bottom of the form
             StatusStripDataStr.Items.Clear();
             int left = 0;
             int right = max - 1;
             int result = -1;
-
+            // Loop to find the searchName in the 2d array by dividing the 2d array rows in two
+            // and comparing the searchName with the two divided parts and eliminating the part 
+            // which does not have the searchName and repeat this loop upto find it.
             while (left <= right)
             {
                 int mid = left + (right - left) / 2;
@@ -105,9 +109,10 @@ namespace WikiData
                     right = mid - 1;
                 }
             }
-
+            // If searched name is found then the data of that row is displayed in the text boxes.
             if (result != -1)
             {
+                // the searched name is selected in the listview
                 listViewData.Items[result].Selected = true;
                 listViewData.Focus();
 
@@ -118,6 +123,8 @@ namespace WikiData
                
                 StatusStripDataStr.Items.Add("Entry found.");
             }
+            // If searched name is not found then displayed "Entry not found!" and clear textboxes
+            // and deselect the listview.
             else
             {
                 StatusStripDataStr.Items.Add("Entry not found!");
@@ -128,23 +135,29 @@ namespace WikiData
             }
         }
 
-
+        // Search button method to find the name which is written by user by calling
+        // BinarySearch method 
         private void ButtonSearch_Click(object sender, EventArgs e)
         {
+            // The txtSearch textbox assign to searchName
             string searchName = txtSearch.Text;
+            // The message on the bottom of the form is deleted
             StatusStripDataStr.Items.Clear();
+            // All textboxes are cleared.
             Clear_TextBoxes();
-
+            // If the txtSearch textbox is not empty then BinarySearch method is called
             if (!string.IsNullOrEmpty(searchName))
             {
                 BinarySearch(searchName);
             }
+            // Else show the message "Please enter a search term."
             else
             {
                 StatusStripDataStr.Items.Add("Please enter a search term.");
             }
         }
-        // Button method to add a new data structure and sort data
+        // Add button method to add a new data structure and sort data in the 2d array and display 
+        // in the listview.
         private void ButtonAdd_Click(object sender, EventArgs e)
         {
             AddData();
@@ -152,7 +165,7 @@ namespace WikiData
             BubbleSortByNameAscending(dataArray);
             DisplayListViewData();
         }
-
+        // AddData method to add data in the 2d array
         private void AddData()
         {
             if (textBoxValues[0].Text != "" && textBoxValues[1].Text != ""
@@ -160,20 +173,23 @@ namespace WikiData
             {
                 if (listViewData.Items.Count < max)
                 {
+                    // Define an array which keeps the data of the textboxes
                     string[] row = new string[fields];
                     for (int col = 0; col < fields; col++)
                     {
                         row[col] = textBoxValues[col].Text;
                     }
-
+                    // Assign the count of the listview items to the rowIndex variable
                     int rowIndex = listViewData.Items.Count;
                     ListViewItem listViewItem = new ListViewItem(row);
+                    // Add each row to the listview
                     listViewData.Items.Add(listViewItem);
-
+                    // Add all data from textboxes to the 2d array
                     for (int col = 0; col < fields; col++)
                     {
                         dataArray[rowIndex, col] = row[col];
                     }
+                    // add 1 to the current count of the 2d array rows
                     ++ptr;
                     StatusStripDataStr.Items.Clear();
                     StatusStripDataStr.Items.Add("The entered data is added to the array.");
@@ -192,7 +208,7 @@ namespace WikiData
             }
             
         }
-
+        // 
         private void DisplayListViewData()
         {
             listViewData.Items.Clear();
