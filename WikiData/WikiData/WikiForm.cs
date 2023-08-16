@@ -162,8 +162,7 @@ namespace WikiData
                 StatusStripDataStr.Items.Add("Please enter a search term.");
             }
         }
-        // Add button method to add a new data structure and sort data in the 2d array and display 
-        // in the listview.
+        // Add button method to add a new data structure and sort data in the 2d array and display in the listview.
         private void ButtonAdd_Click(object sender, EventArgs e)
         {
             AddData();
@@ -177,11 +176,12 @@ namespace WikiData
         {
             if (textBoxValues[0].Text != "" && textBoxValues[1].Text != ""
                && textBoxValues[2].Text != "" && textBoxValues[3].Text != "")
-            {
+            {// if the count of the list view is less than 12
                 if (listViewData.Items.Count < max)
                 {
                     // Define an array which keeps the data of the textboxes
                     string[] row = new string[fields];
+                    // Loop to keep all columns from the text boxes in each row of the array
                     for (int col = 0; col < fields; col++)
                     {
                         row[col] = textBoxValues[col].Text;
@@ -191,12 +191,12 @@ namespace WikiData
                     ListViewItem listViewItem = new ListViewItem(row);
                     // Add each row to the listview
                     listViewData.Items.Add(listViewItem);
-                    // Add all data from textboxes to the 2d array
+                    // Assign all data in row array to the 2d array in a loop
                     for (int col = 0; col < fields; col++)
                     {
                         dataArray[rowIndex, col] = row[col];
                     }
-                    // add 1 to the current count of the 2d array rows
+                    // Increment 1 to the current index of the 2d array rows
                     ++ptr;
                     StatusStripDataStr.Items.Clear();
                     StatusStripDataStr.Items.Add("The entered data is added to the array.");
@@ -215,24 +215,24 @@ namespace WikiData
             }
             
         }
-        // 
+        // Display data in listview
         private void DisplayListViewData()
-        {
+        {// Clear listview from previous data
             listViewData.Items.Clear();
+            // loop on the rows of the array
             for (int row = 0; row < dataArray.GetLength(0); row++)
-            {
+            {// If array is not empty
                 if (!string.IsNullOrEmpty(dataArray[row, 0]))
                 {
                     ListViewItem item = new ListViewItem(dataArray[row, 0]);
+                    // loop to add the columns to the array
                     for (int col = 1; col < dataArray.GetLength(1); col++)
                     {
                         item.SubItems.Add(dataArray[row, col]);
-                    }
+                    }// Add each row to the array
                     listViewData.Items.Add(item);
-                }
-                
+                }            
             }
-
         }
    
         // Method to clear the input text boxes.
@@ -246,11 +246,11 @@ namespace WikiData
         }
      
  
-
+        // Edit method 
         private void ButtonEdit_Click(object sender, EventArgs e)
-        {
+        {// If there is any item in listview
             if (listViewData.SelectedItems.Count > 0)
-            {
+            {// 
                 int selectedRowIndex = listViewData.SelectedIndices[0];
                 for (int j =0; j < fields; j++)
                 {
