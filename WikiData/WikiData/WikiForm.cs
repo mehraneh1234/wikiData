@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace WikiData
 {
@@ -22,13 +23,12 @@ namespace WikiData
             listViewData.SelectedIndexChanged += listView_SelectedIndexChanged;
         }
 
-        static int max = 3;        // Maximum number of data structures
+        static int max = 12;        // Maximum number of data structures
         static int fields = 4;      // Data Structure Name, Category, Structure and Definition
         int ptr = 0;                // Current count of 2d array rows with data
         private string[,] dataArray = new string[max, fields]; // 2d array to keep data in itself.
         private TextBox[] textBoxValues;  // Define a variable with type of textbox
-
-       
+      
 
         private void InitializeListView()
         {
@@ -85,6 +85,7 @@ namespace WikiData
             }
             // Clear the description on the bottom of the form
             StatusStripDataStr.Items.Clear();
+            bool found = false;
             int left = 0;
             int right = max - 1;
             int result = -1;
@@ -93,20 +94,25 @@ namespace WikiData
             // which does not have the searchName and repeat this loop upto find it.
             while (left <= right)
             {
-                int mid = left + (right - left) / 2;
-
-                if (dataArray[mid, 0] == searchName)
+                int mid = left + (right - left) / 2;     // Uses integer division
+                Trace.TraceInformation("mid {0}", mid);  // Output Trace information
+                if (dataArray[mid, 0].ToLower() == searchName.ToLower())
                 {
                     result = mid;
+                    found = true;
+                    // Output Trace information
+                    Trace.TraceInformation("Found {0} mid {1} Data Name {2}", found, mid, dataArray[mid, 0]); 
                     break;
                 }
                 else if (string.Compare(dataArray[mid, 0], searchName) < 0)
                 {
                     left = mid + 1;
+                    Trace.TraceInformation("min {0}", left);
                 }
                 else
                 {
                     right = mid - 1;
+                    Trace.TraceInformation("max {0}", right); // Output Trace information
                 }
             }
             // If searched name is found then the data of that row is displayed in the text boxes.
@@ -130,7 +136,7 @@ namespace WikiData
                 StatusStripDataStr.Items.Add("Entry not found!");
                 txtSearch.Clear();
                 // Deselect previous selected item
-                listViewData.SelectedItems[0].Selected = false;
+                //listViewData.SelectedItems[0].Selected = false;
                 
             }
         }
@@ -164,6 +170,7 @@ namespace WikiData
             Clear_TextBoxes();
             BubbleSortByNameAscending(dataArray);
             DisplayListViewData();
+            buttonSave.Enabled = true;
         }
         // AddData method to add data in the 2d array
         private void AddData()
@@ -286,6 +293,7 @@ namespace WikiData
                     UpdateDataArray(selectedIndex);
                     listViewData.Items.RemoveAt(selectedIndex);
                     --ptr;
+                    Clear_TextBoxes();
                 }
             }
             else
@@ -324,8 +332,7 @@ namespace WikiData
                 {
                    
                     dataArray[i, j] = newArray[i, j];
-                    
-
+                  
                 }
             }
 
@@ -340,6 +347,7 @@ namespace WikiData
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Binary Files|*.dat|All Files|*.*";
+            openFileDialog.FileName = "default.dat";
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
@@ -369,6 +377,7 @@ namespace WikiData
                         DisplayListViewData();
                         StatusStripDataStr.Items.Add("Data loaded successfully.");
                     }
+                    buttonSave.Enabled = true;
                 }
                 catch (Exception ex)
                 {
@@ -430,6 +439,7 @@ namespace WikiData
         private void WikiForm_Load(object sender, EventArgs e)
         {
             textBoxValues = new TextBox[] { txtDataStrName, txtCategory, txtStructure, txtDefinition };
+            buttonSave.Enabled = false;
         }
 
         private void listView_SelectedIndexChanged(object sender, EventArgs e)
