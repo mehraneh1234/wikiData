@@ -127,13 +127,13 @@ namespace WikiData
                 txtStructure.Text = dataArray[result, 2];
                 txtDefinition.Text = dataArray[result, 3];
                
-                StatusStripDataStr.Items.Add("Entry found.");
+                StatusStripDataStr.Items.Add("Target found.");
             }
             // If searched name is not found then displayed "Entry not found!" and clear textboxes
             // and deselect the listview.
             else
             {
-                StatusStripDataStr.Items.Add("Entry not found!");
+                StatusStripDataStr.Items.Add("Target not found!");
                 txtSearch.Clear();
                 // Deselect previous selected item
                 //listViewData.SelectedItems[0].Selected = false;
@@ -344,10 +344,10 @@ namespace WikiData
         private void ButtonLoad_Click(object sender, EventArgs e)
         {
             StatusStripDataStr.Items.Clear();
-
+            listViewData.Items.Clear();
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Binary Files|*.dat|All Files|*.*";
-            openFileDialog.FileName = "default.dat";
+            openFileDialog.FileName = "definitions.dat";
 
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
@@ -405,6 +405,7 @@ namespace WikiData
             StatusStripDataStr.Items.Clear();
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Binary Files|*.dat|All Files|*.*";
+            saveFileDialog.FileName = "definitions.dat";
 
             if (saveFileDialog.ShowDialog() == DialogResult.OK)
             {
@@ -441,7 +442,7 @@ namespace WikiData
             textBoxValues = new TextBox[] { txtDataStrName, txtCategory, txtStructure, txtDefinition };
             buttonSave.Enabled = false;
         }
-
+        // A mouse click on an item in the listview, display its detail in the four text boxes 
         private void listView_SelectedIndexChanged(object sender, EventArgs e)
         {
             StatusStripDataStr.Items.Clear();
@@ -455,5 +456,13 @@ namespace WikiData
               //  StatusStripDataStr.Items.Add("The selected Name is displyed.");
             }
         }
+
+        // A double mouse click in the name text box will clear all four text boxes and focus the cursor into the name text box.
+        private void txtDataStrName_DoubleClick(object sender, EventArgs e)
+        {
+            Clear_TextBoxes();
+            txtDataStrName.Focus();
+        }
+
     }
 }

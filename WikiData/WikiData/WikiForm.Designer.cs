@@ -52,9 +52,10 @@
             // 
             // buttonSave
             // 
-            this.buttonSave.Location = new System.Drawing.Point(610, 43);
+            this.buttonSave.Location = new System.Drawing.Point(915, 66);
+            this.buttonSave.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonSave.Name = "buttonSave";
-            this.buttonSave.Size = new System.Drawing.Size(104, 23);
+            this.buttonSave.Size = new System.Drawing.Size(156, 35);
             this.buttonSave.TabIndex = 34;
             this.buttonSave.Text = "Save";
             this.toolTip1.SetToolTip(this.buttonSave, "Save");
@@ -63,9 +64,10 @@
             // 
             // buttonLoad
             // 
-            this.buttonLoad.Location = new System.Drawing.Point(502, 43);
+            this.buttonLoad.Location = new System.Drawing.Point(753, 66);
+            this.buttonLoad.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonLoad.Name = "buttonLoad";
-            this.buttonLoad.Size = new System.Drawing.Size(104, 23);
+            this.buttonLoad.Size = new System.Drawing.Size(156, 35);
             this.buttonLoad.TabIndex = 33;
             this.buttonLoad.Text = "Load";
             this.toolTip1.SetToolTip(this.buttonLoad, "Load");
@@ -74,9 +76,10 @@
             // 
             // buttonSearch
             // 
-            this.buttonSearch.Location = new System.Drawing.Point(395, 43);
+            this.buttonSearch.Location = new System.Drawing.Point(592, 66);
+            this.buttonSearch.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonSearch.Name = "buttonSearch";
-            this.buttonSearch.Size = new System.Drawing.Size(101, 23);
+            this.buttonSearch.Size = new System.Drawing.Size(152, 35);
             this.buttonSearch.TabIndex = 32;
             this.buttonSearch.Text = "Search";
             this.toolTip1.SetToolTip(this.buttonSearch, "Search");
@@ -85,26 +88,29 @@
             // 
             // txtSearch
             // 
-            this.txtSearch.Location = new System.Drawing.Point(98, 43);
+            this.txtSearch.Location = new System.Drawing.Point(147, 66);
+            this.txtSearch.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(256, 20);
+            this.txtSearch.Size = new System.Drawing.Size(382, 26);
             this.txtSearch.TabIndex = 31;
             this.toolTip1.SetToolTip(this.txtSearch, "Enter a Data Structure Name to search");
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(45, 43);
+            this.label5.Location = new System.Drawing.Point(68, 66);
+            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(47, 13);
+            this.label5.Size = new System.Drawing.Size(68, 20);
             this.label5.TabIndex = 30;
             this.label5.Text = "Search: ";
             // 
             // buttonDelete
             // 
-            this.buttonDelete.Location = new System.Drawing.Point(265, 318);
+            this.buttonDelete.Location = new System.Drawing.Point(398, 489);
+            this.buttonDelete.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonDelete.Name = "buttonDelete";
-            this.buttonDelete.Size = new System.Drawing.Size(103, 23);
+            this.buttonDelete.Size = new System.Drawing.Size(154, 35);
             this.buttonDelete.TabIndex = 29;
             this.buttonDelete.Text = "Delete";
             this.toolTip1.SetToolTip(this.buttonDelete, "Delete");
@@ -113,9 +119,10 @@
             // 
             // buttonEdit
             // 
-            this.buttonEdit.Location = new System.Drawing.Point(156, 318);
+            this.buttonEdit.Location = new System.Drawing.Point(234, 489);
+            this.buttonEdit.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonEdit.Name = "buttonEdit";
-            this.buttonEdit.Size = new System.Drawing.Size(104, 23);
+            this.buttonEdit.Size = new System.Drawing.Size(156, 35);
             this.buttonEdit.TabIndex = 28;
             this.buttonEdit.Text = "Edit";
             this.toolTip1.SetToolTip(this.buttonEdit, "Edit");
@@ -124,9 +131,10 @@
             // 
             // buttonAdd
             // 
-            this.buttonAdd.Location = new System.Drawing.Point(48, 318);
+            this.buttonAdd.Location = new System.Drawing.Point(72, 489);
+            this.buttonAdd.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonAdd.Name = "buttonAdd";
-            this.buttonAdd.Size = new System.Drawing.Size(104, 23);
+            this.buttonAdd.Size = new System.Drawing.Size(156, 35);
             this.buttonAdd.TabIndex = 27;
             this.buttonAdd.Text = "Add";
             this.toolTip1.SetToolTip(this.buttonAdd, "Add");
@@ -135,97 +143,108 @@
             // 
             // txtDefinition
             // 
-            this.txtDefinition.Location = new System.Drawing.Point(167, 231);
+            this.txtDefinition.Location = new System.Drawing.Point(250, 355);
+            this.txtDefinition.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtDefinition.Name = "txtDefinition";
-            this.txtDefinition.Size = new System.Drawing.Size(187, 20);
+            this.txtDefinition.Size = new System.Drawing.Size(278, 26);
             this.txtDefinition.TabIndex = 26;
             this.toolTip1.SetToolTip(this.txtDefinition, "Definition");
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(45, 231);
+            this.label4.Location = new System.Drawing.Point(68, 355);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(54, 13);
+            this.label4.Size = new System.Drawing.Size(80, 20);
             this.label4.TabIndex = 25;
             this.label4.Text = "Definition:";
             // 
             // txtStructure
             // 
-            this.txtStructure.Location = new System.Drawing.Point(167, 186);
+            this.txtStructure.Location = new System.Drawing.Point(250, 286);
+            this.txtStructure.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtStructure.Name = "txtStructure";
-            this.txtStructure.Size = new System.Drawing.Size(187, 20);
+            this.txtStructure.Size = new System.Drawing.Size(278, 26);
             this.txtStructure.TabIndex = 24;
             this.toolTip1.SetToolTip(this.txtStructure, "Structure");
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(45, 186);
+            this.label3.Location = new System.Drawing.Point(68, 286);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(53, 13);
+            this.label3.Size = new System.Drawing.Size(79, 20);
             this.label3.TabIndex = 23;
             this.label3.Text = "Structure:";
             // 
             // txtCategory
             // 
-            this.txtCategory.Location = new System.Drawing.Point(167, 141);
+            this.txtCategory.Location = new System.Drawing.Point(250, 217);
+            this.txtCategory.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtCategory.Name = "txtCategory";
-            this.txtCategory.Size = new System.Drawing.Size(187, 20);
+            this.txtCategory.Size = new System.Drawing.Size(278, 26);
             this.txtCategory.TabIndex = 22;
             this.toolTip1.SetToolTip(this.txtCategory, "Category");
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(45, 141);
+            this.label2.Location = new System.Drawing.Point(68, 217);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(55, 13);
+            this.label2.Size = new System.Drawing.Size(81, 20);
             this.label2.TabIndex = 21;
             this.label2.Text = "Category: ";
             // 
             // txtDataStrName
             // 
-            this.txtDataStrName.Location = new System.Drawing.Point(167, 96);
+            this.txtDataStrName.Location = new System.Drawing.Point(250, 148);
+            this.txtDataStrName.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.txtDataStrName.Name = "txtDataStrName";
-            this.txtDataStrName.Size = new System.Drawing.Size(187, 20);
+            this.txtDataStrName.Size = new System.Drawing.Size(278, 26);
             this.txtDataStrName.TabIndex = 20;
             this.toolTip1.SetToolTip(this.txtDataStrName, "Data Structure Name");
+            this.txtDataStrName.DoubleClick += new System.EventHandler(this.txtDataStrName_DoubleClick);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(45, 96);
+            this.label1.Location = new System.Drawing.Point(68, 148);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(110, 13);
+            this.label1.Size = new System.Drawing.Size(164, 20);
             this.label1.TabIndex = 19;
             this.label1.Text = "Data Structure Name:";
             // 
             // StatusStripDataStr
             // 
             this.StatusStripDataStr.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.StatusStripDataStr.Location = new System.Drawing.Point(0, 358);
+            this.StatusStripDataStr.Location = new System.Drawing.Point(0, 563);
             this.StatusStripDataStr.Name = "StatusStripDataStr";
-            this.StatusStripDataStr.Padding = new System.Windows.Forms.Padding(1, 0, 9, 0);
-            this.StatusStripDataStr.Size = new System.Drawing.Size(770, 22);
+            this.StatusStripDataStr.Padding = new System.Windows.Forms.Padding(2, 0, 14, 0);
+            this.StatusStripDataStr.Size = new System.Drawing.Size(1155, 22);
             this.StatusStripDataStr.TabIndex = 35;
             this.StatusStripDataStr.Text = "statusStrip1";
             // 
             // listViewData
             // 
             this.listViewData.HideSelection = false;
-            this.listViewData.Location = new System.Drawing.Point(395, 95);
+            this.listViewData.Location = new System.Drawing.Point(592, 146);
+            this.listViewData.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.listViewData.Name = "listViewData";
-            this.listViewData.Size = new System.Drawing.Size(319, 247);
+            this.listViewData.Size = new System.Drawing.Size(476, 378);
             this.listViewData.TabIndex = 36;
             this.toolTip1.SetToolTip(this.listViewData, "Listview of Data Structure Name and Category");
             this.listViewData.UseCompatibleStateImageBehavior = false;
+            this.listViewData.SelectedIndexChanged += new System.EventHandler(this.listView_SelectedIndexChanged);
             // 
             // WikiForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(770, 380);
+            this.ClientSize = new System.Drawing.Size(1155, 585);
             this.Controls.Add(this.listViewData);
             this.Controls.Add(this.StatusStripDataStr);
             this.Controls.Add(this.buttonSave);
@@ -244,7 +263,6 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtDataStrName);
             this.Controls.Add(this.label1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "WikiForm";
             this.Text = "List of Data Structure";
             this.Load += new System.EventHandler(this.WikiForm_Load);
