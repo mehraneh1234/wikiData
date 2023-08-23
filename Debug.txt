@@ -1,0 +1,63 @@
+
+Search Target: array
+mid 5
+Search Target: array
+mid 5
+min 4
+mid 2
+min 1
+mid 0
+Found True mid 0 Data Name Array
+Target Found
+Search Target: two dimention array
+mid 5
+min 6
+mid 8
+min 9
+mid 10
+min 11
+mid 11
+Found True mid 11 Data Name Two Dimention Array
+Target Found
+Search Target: linked list
+mid 5
+Found True mid 5 Data Name Linked List
+Target Found
+Search Target: mapp
+mid 5
+min 6
+mid 8
+min 7
+mid 6
+min 7
+mid 7
+min 6
+Target Not Found
+Search Target: 1254
+mid 5
+min 4
+mid 2
+min 1
+mid 0
+min -1
+Target Not Found
+Search Target: b+
+mid 5
+min 4
+mid 2
+min 1
+mid 0
+min 1
+mid 1
+min 0
+Target Not Found
+Search Target: set
+mid 5
+min 6
+mid 8
+min 9
+mid 10
+min 9
+mid 9
+Found True mid 9 Data Name Set
+Target Found

@@ -1,7 +1,4 @@
-﻿// Mehraneh Hamedani - 30062786
-// Assessment Task One - 19/08/2023
-
-using System;
+﻿using System;
 using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,7 +11,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Globalization;
 
+
+// Assessment Task One 
+// Mehraneh Hamedani - 30062786 - 19/08/2023
 namespace WikiData
 {
     public partial class WikiForm : Form
@@ -38,13 +39,13 @@ namespace WikiData
             
             listViewData.View = View.Details;
             // Define the titles of the columns in the listview
-            listViewData.Columns.Add("Data Structure Name");
+            listViewData.Columns.Add("Name");
             listViewData.Columns.Add("Category");
             //listViewData.Columns.Add("Structure");
             //listViewData.Columns.Add("Definition");
         }
+        #region Swap & Bubble Sort
 
-        
         // Swap the two rows of the 2d array with their fields
         private void Swap(string[,] array, int row1, int row2)
         {
@@ -77,10 +78,13 @@ namespace WikiData
                 }
             }
         }
-
+        #endregion
+        #region Binary Search   
         // By calling binary search method find the item which is in searchName variable
         private void BinarySearch(string searchName)
         {
+            StreamWriter TextWriter;
+            TextWriter = new StreamWriter("Debug.txt", true);
             // Deselect previous selected item
             if (listViewData.SelectedItems.Count > 0)
             {
@@ -92,30 +96,39 @@ namespace WikiData
             int left = 0;
             int right = max - 1;
             int result = -1;
+            string findThis = txtSearch.Text;
             // Loop to find the searchName in the 2d array by dividing the 2d array rows in two
             // and comparing the searchName with the two divided parts and eliminating the part 
             // which does not have the searchName and repeat this loop upto find it.
+            Trace.TraceInformation("Search Target : {0}", findThis);
+            TextWriter.WriteLine("Search Target: {0}", findThis);
             while (left <= right)
             {
                 int mid = left + (right - left) / 2;     // Uses integer division
                 Trace.TraceInformation("mid {0}", mid);  // Output Trace information
+                TextWriter.WriteLine("mid {0}", mid);
                 if (dataArray[mid, 0].ToLower() == searchName.ToLower())
                 {
                     result = mid;
                     found = true;
                     // Output Trace information
-                    Trace.TraceInformation("Found {0} mid {1} Data Name {2}", found, mid, dataArray[mid, 0]); 
+                    Trace.TraceInformation("Found {0} mid {1} Data Name {2}", found, mid, dataArray[mid, 0]);
+                    TextWriter.WriteLine("Found {0} mid {1} Data Name {2}", found, mid, dataArray[mid, 0]);
+                    Trace.TraceInformation("Target Found");
+                    TextWriter.WriteLine("Target Found");
                     break;
                 }
                 else if (string.Compare(dataArray[mid, 0], searchName) < 0)
                 {
                     left = mid + 1;
                     Trace.TraceInformation("min {0}", left);
+                    TextWriter.WriteLine("min {0}", left);
                 }
                 else
                 {
                     right = mid - 1;
                     Trace.TraceInformation("max {0}", right); // Output Trace information
+                    TextWriter.WriteLine("min {0}", right);
                 }
             }
             // If searched name is found then the data of that row is displayed in the text boxes.
@@ -137,13 +150,13 @@ namespace WikiData
             else
             {
                 StatusStripDataStr.Items.Add("Target not found!");
+                Trace.TraceInformation("Target Not Found");
+                TextWriter.WriteLine("Target Not Found");
                 txtSearch.Clear();
-                // Deselect previous selected item
-                //listViewData.SelectedItems[0].Selected = false;
-                
             }
+            TextWriter.Close();
         }
-
+       
         // Search button method to find the name which is written by user by calling
         // BinarySearch method 
         private void ButtonSearch_Click(object sender, EventArgs e)
@@ -165,6 +178,8 @@ namespace WikiData
                 StatusStripDataStr.Items.Add("Please enter a search term.");
             }
         }
+        #endregion
+        #region Add
         // Add button method to add a new data structure and sort data in the 2d array and display in the listview.
         private void ButtonAdd_Click(object sender, EventArgs e)
         {
@@ -219,6 +234,8 @@ namespace WikiData
             }
             
         }
+        #endregion
+        #region Display in LIstview
         // Display data in listview
         private void DisplayListViewData()
         {// Clear listview from previous data
@@ -238,7 +255,8 @@ namespace WikiData
                 }            
             }
         }
-   
+        #endregion
+        #region clear textboxes
         // Method to clear the input text boxes.
         private void Clear_TextBoxes()
         {
@@ -246,10 +264,11 @@ namespace WikiData
             {
                 textBox.Clear();
             }
+            txtDataStrName.Focus();
             
         }
-     
- 
+        #endregion
+        #region Edit
         // Edit method 
         private void ButtonEdit_Click(object sender, EventArgs e)
         {// If there is any item in listview
@@ -275,6 +294,8 @@ namespace WikiData
                 }
                 StatusStripDataStr.Items.Add("The selected row is edited!");
                 Clear_TextBoxes();
+                BubbleSortByNameAscending(dataArray);
+                DisplayListViewData();
             }
             else
             {// Clear and show the message at the bottom of the form.
@@ -282,14 +303,15 @@ namespace WikiData
             }
                        
         }
-        
+        #endregion
+        #region Delete
         // Method Delete
         private void ButtonDelete_Click(object sender, EventArgs e)
         {// If an item is selected in the listview
             if (listViewData.SelectedItems.Count > 0)
             {// A window pop up with this message "Are you sure to delete this entry?" 
                 DialogResult result = MessageBox.Show("Are you sure to delete this entry?", "Confirmation",
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
                 // If click on Yes button then put ~ in the columns of that item (row) by using for loop
                 if (result == DialogResult.Yes)
                 {
@@ -302,9 +324,7 @@ namespace WikiData
                     UpdateDataArray(selectedIndex);
                     // Delete the selected item from the listview
                     listViewData.Items.RemoveAt(selectedIndex);
-                    // Subtract 1 from the current index of the 2d array  
                     --ptr;
-                    // Clear all text boxes
                     Clear_TextBoxes();
                 }
             }// If none of the items is selected in the listview
@@ -314,7 +334,8 @@ namespace WikiData
             }
 
         }
-
+        #endregion Delete
+        #region Update
         // Update method with one parameter and no output
         private void UpdateDataArray(int selectedRowIndex)
         {// Assign the count of the rows and columns to the variables
@@ -347,11 +368,10 @@ namespace WikiData
                   
                 }
             }
-
            
-
         }
-
+        #endregion
+        #region Load
         // Load method
         private void ButtonLoad_Click(object sender, EventArgs e)
         {// the bottom of the form and listview both clear.
@@ -398,6 +418,8 @@ namespace WikiData
                 }
             }
         }
+        #endregion
+        #region Resize Array
         // ResizeDataArray method with one parameter and no output
         private void ResizeDataArray(int newSize)
         {// Define a new 2D array with assigning the new values for rows and columns
@@ -415,7 +437,8 @@ namespace WikiData
             // The current index of the row is the newSize
             ptr = newSize;
         }
-        // Save method
+        #endregion
+        #region Save
         private void ButtonSave_Click(object sender, EventArgs e)
         {// the bottom of the form is clear and call BubbleSortByNameAscending method with dataArray parameter.
             BubbleSortByNameAscending(dataArray);
@@ -454,7 +477,8 @@ namespace WikiData
                 }
             }
         }
-         // form load method
+        #endregion
+        #region Load Form
         private void WikiForm_Load(object sender, EventArgs e)
         {
             textBoxValues = new TextBox[] { txtDataStrName, txtCategory, txtStructure, txtDefinition };
@@ -474,13 +498,97 @@ namespace WikiData
               
             }
         }
-
+        #endregion
+        #region Clear textboxes by double click on Name textbox
         // A double mouse click in the name text box will clear all four text boxes and focus the cursor into the name text box.
         private void txtDataStrName_DoubleClick(object sender, EventArgs e)
         {
             Clear_TextBoxes();
             txtDataStrName.Focus();
         }
+        #endregion
+        #region Capitalize initial
+        // Capitalize the first letter in the textboxes
+        private void Textbox_Leave(object sender, EventArgs e)
+        {
+            txtDataStrName.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(txtDataStrName.Text);
+            txtCategory.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(txtCategory.Text);
+            txtStructure.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(txtStructure.Text);
+          //  txtDefinition.Text = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(txtDefinition.Text);
+        }
+        #endregion
+        #region Delete Double Click On ListView
+        private void listViewData_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (listViewData.SelectedItems.Count > 0)
+            {// A window pop up with this message "Are you sure to delete this entry?" 
+                DialogResult result = MessageBox.Show("Are you sure to delete this entry?", "Confirmation",
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                // If click on Yes button then put ~ in the columns of that item (row) by using for loop
+                if (result == DialogResult.Yes)
+                {
+                    int selectedIndex = listViewData.SelectedItems[0].Index;
+                    for (int j = 0; j < fields; j++)
+                    {
+                        dataArray[selectedIndex, j] = "~";
+                    }
+                    // Call UpdateDataArray method with selectedIndex parameter
+                    UpdateDataArray(selectedIndex);
+                    // Delete the selected item from the listview
+                    listViewData.Items.RemoveAt(selectedIndex);
+                    // Subtract 1 from the current index of the 2d array  
+                    --ptr;
+                    // Clear all text boxes
+                    Clear_TextBoxes();
+                }
+            }// If none of the items is selected in the listview
+            else
+            {// Display "Please select an entry to delete." at the bottom of the form
+                StatusStripDataStr.Items.Add("Please select an entry to delete.");
+            }
 
+        }
+        #endregion
+        #region Popup Save Window Close Form
+        private void WikiForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            // the bottom of the form is clear and call BubbleSortByNameAscending method with dataArray parameter.
+            BubbleSortByNameAscending(dataArray);
+            StatusStripDataStr.Items.Clear();
+            // Open the save window with default name of definitions.dat and filter "Binary Files|*.dat|All Files|*.*"
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Binary Files|*.dat|All Files|*.*";
+            saveFileDialog.FileName = "definitions.dat";
+            // If save window opens
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {// Default name assigns to the variable with string type
+                string fileName = saveFileDialog.FileName;
+                // If data saves
+                try
+                {
+                    using (FileStream fileStream = new FileStream(fileName, FileMode.Create))
+                    using (BinaryWriter binaryWriter = new BinaryWriter(fileStream))
+                    {
+                        // Write the number of entries
+                        binaryWriter.Write(ptr);
+
+                        // Write the data
+                        for (int i = 0; i < ptr; i++)
+                        {
+                            for (int j = 0; j < fields; j++)
+                            {
+                                binaryWriter.Write(dataArray[i, j]);
+                            }
+                        }
+                        StatusStripDataStr.Items.Add("Data saved successfully.");
+                    }
+                }// If an error occurs
+                catch (Exception ex)
+                {// Display "Error saving data: " + ex.Message
+                    StatusStripDataStr.Items.Add("Error saving data: " + ex.Message);
+                }
+            }
+        }
+        #endregion
     }
 }
